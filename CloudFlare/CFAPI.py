@@ -70,7 +70,7 @@ class APICall:
 
     def front_end_upoload(self, encoded_data, cloudflare_id, metadata, img_file):
 
-        url = 'https://upload.imagedelivery.net/4_y5kVkw2ENjgzV454LjcQ/' + cloudflare_id
+        url = f'https://upload.imagedelivery.net/4_y5kVkw2ENjgzV454LjcQ/{cloudflare_id}'
         print(url)
         meta_list = metadata
         headers = {
@@ -115,17 +115,60 @@ class APICall:
     def get_image_usage(self, meta_passed):
         pass
 
-    def list_images(self, meta_passed):
-        pass
+    def list_images(self):
+        url = f'https://api.cloudflare.com/client/v4/accounts/{account_ID}/images/v1'
 
-    def delete_image(self, meta_passed):
-        pass
+        headers = {
+            'Authorization': f'Bearer {api_key}',
+            'Content-type': 'application/json',
+            'X-Auth-Email': user_email
+        }
+        time.sleep(15)
+        response = requests.get(url, headers=headers)
+        print(requests.get(url, headers=headers))
+        print(response.text)
 
-    def image_details(self, meta_passed):
-        pass
+    def delete_image(self, cloudflare_id):
 
-    def image_download(self, meta_passed):
-        pass
+        url = f'https://api.cloudflare.com/client/v4/accounts/{account_ID}/images/v1/{cloudflare_id}'
+
+        headers = {
+            'Authorization': f'Bearer {api_key}',
+            'Content-type': 'application/json',
+            'X-Auth-Email': user_email
+        }
+        time.sleep(15)
+        response = requests.delete(url, headers=headers)
+        print(requests.delete(url, headers=headers))
+        print(response.text)
+
+    def image_details(self, cloudflare_id):
+
+        url = f'https://api.cloudflare.com/client/v4/accounts/{account_ID}/images/v1/{cloudflare_id}'
+
+        headers = {
+            'Authorization': f'Bearer {api_key}',
+            'Content-type': 'application/json',
+            'X-Auth-Email': user_email
+        }
+        time.sleep(15)
+        response = requests.get(url, headers=headers)
+        print(requests.get(url, headers=headers))
+        print(response.text)
+
+    def image_download(self, cloudflare_id):
+        ''
+        url = f'https://api.cloudflare.com/client/v4/accounts/{account_ID}/images/v1/{cloudflare_id}/blob'
+
+        headers = {
+            'Authorization': f'Bearer {api_key}',
+            'Content-type': 'application/json',
+            'X-Auth-Email': user_email
+        }
+        time.sleep(15)
+        response = requests.get(url, headers=headers)
+        print(requests.get(url, headers=headers))
+        print(response.text)
 
     def image_update(self, meta_passed, cloudflare_id):
         print(meta_passed, cloudflare_id)
@@ -150,10 +193,10 @@ class APICall:
             'X-Auth-Email': user_email
         }
         data = {
+            'filename': title,
             'metadata': metadata_packed,
             'requireSignedURLs': private
         }
-        print(data, headers)
         time.sleep(15)
         response = requests.patch(url, headers=headers, json=data)
         print(requests.patch(url, headers=headers, data=data))
